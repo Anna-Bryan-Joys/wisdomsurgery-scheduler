@@ -108,7 +108,7 @@
       cache: { cacheLocation: 'localStorage', storeAuthStateInCookie: false }
     };
 
-    const SCOPES = ['Calendars.ReadWrite'];
+    const SCOPES = ['Calendars.ReadWrite', 'Calendars.ReadWrite.Shared'];
     const SHARED_CALENDAR = 'adminteam@wisdomsurgery.clinic';
     const GRAPH_ENDPOINT = `https://graph.microsoft.com/v1.0/users/${SHARED_CALENDAR}/calendar/events`;
 
@@ -258,7 +258,7 @@
 
       } catch (e) {
         console.error(e);
-        showStatus('Something went wrong. Check your connection and try again.', 'error');
+        showStatus(e.message || 'Something went wrong. Check your connection and try again.', 'error');
       } finally {
         btn.disabled = false;
         btn.style.background = 'linear-gradient(135deg,#2ab4b4 0%,#1e9696 100%)';
