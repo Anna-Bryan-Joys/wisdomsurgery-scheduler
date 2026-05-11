@@ -139,20 +139,19 @@
 
     async function signIn() {
       try {
-        const result = await msalInstance.loginPopup({ scopes: SCOPES });
-        setAccount(result.account);
+        await msalInstance.loginRedirect({ scopes: SCOPES });
       } catch (e) {
         console.error(e);
       }
     }
 
     function signOut() {
-      msalInstance.logoutPopup({ account: currentAccount });
       currentAccount = null;
       document.getElementById('authDot').className = 'w-2 h-2 rounded-full flex-shrink-0 bg-amber-400';
       document.getElementById('authLabel').textContent = 'Not signed in';
       document.getElementById('signinScreen').classList.remove('hidden');
       document.getElementById('appMain').classList.add('hidden');
+      msalInstance.logoutRedirect();
     }
 
     async function getToken() {
@@ -160,8 +159,8 @@
         const result = await msalInstance.acquireTokenSilent({ scopes: SCOPES, account: currentAccount });
         return result.accessToken;
       } catch {
-        const result = await msalInstance.acquireTokenPopup({ scopes: SCOPES });
-        return result.accessToken;
+        await msalInstance.acquireTokenRedirect({ scopes: SCOPES, account: currentAccount });
+        throw new Error('Redirecting for auth');
       }
     }
 
